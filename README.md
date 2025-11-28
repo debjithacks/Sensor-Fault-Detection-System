@@ -17,8 +17,8 @@ This app is deployed on Streamlit Community Cloud.
 
 ## Admin Access
 
-- Username: `admin`
-- Password: `admin123`
+- Username: `***`
+- Password: `*******`
 
 ## Tech Stack
 
