@@ -14,14 +14,21 @@ def ensure_directories():
 def load_activity_logs():
     """Load activity logs from JSON file"""
     if os.path.exists(ACTIVITY_LOG_FILE):
-        with open(ACTIVITY_LOG_FILE, 'r') as f:
-            return json.load(f)
+        try:
+            with open(ACTIVITY_LOG_FILE, 'r', encoding='utf-8') as f:
+                return json.load(f)
+        except (json.JSONDecodeError, UnicodeDecodeError):
+            # If file is corrupted, return empty list and recreate
+            return []
     return []
 
 def save_activity_logs(logs):
     """Save activity logs to JSON file"""
-    with open(ACTIVITY_LOG_FILE, 'w') as f:
-        json.dump(logs, f, indent=4)
+    try:
+        with open(ACTIVITY_LOG_FILE, 'w', encoding='utf-8') as f:
+            json.dump(logs, f, indent=4, ensure_ascii=False)
+    except Exception as e:
+        print(f"Error saving activity logs: {e}")
 
 def log_user_activity(username, sensor_type, input_filename, output_filename, input_data, output_data):
     """
