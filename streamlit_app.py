@@ -174,13 +174,11 @@ st.markdown("""
     </style>
     """, unsafe_allow_html=True)
 
-# =============================================================================
 # AUTHENTICATION PAGES
-# =============================================================================
 
 def login_page():
     """Display login page"""
-    # st.markdown("<div class='login-container'>", unsafe_allow_html=True)
+  # st.markdown("<div class='login-container'>", unsafe_allow_html=True)
     st.markdown("## Login")
     st.markdown("---")
     
@@ -253,9 +251,7 @@ def signup_page():
     
     st.markdown("</div>", unsafe_allow_html=True)
 
-# =============================================================================
 # ROUTE TO APPROPRIATE PAGE
-# =============================================================================
 
 if not st.session_state.logged_in:
     if st.session_state.page == 'login':
@@ -264,12 +260,10 @@ if not st.session_state.logged_in:
         signup_page()
     st.stop()
 
-# =============================================================================
 # ADMIN PANEL
-# =============================================================================
 
 if st.session_state.role == 'admin':
-    # Admin Panel Header
+# Admin Panel Header
     col1, col2, col3 = st.columns([4, 1, 1])
     with col1:
         st.markdown("## Admin Dashboard")
@@ -287,10 +281,10 @@ if st.session_state.role == 'admin':
     
     st.markdown("---")
     
-    # Get latest 5 activity logs
+# Get latest 5 activity logs
     logs = get_latest_logs(limit=5)
     
-    # Statistics
+# Statistics
     col1, col2, col3 = st.columns(3)
     with col1:
         st.markdown("""
@@ -326,7 +320,7 @@ if st.session_state.role == 'admin':
         st.markdown("### Recent User Activities (Latest 5)")
         st.markdown("<br>", unsafe_allow_html=True)
         
-        # Display each activity
+# Display each activity
         for idx, log in enumerate(logs):
             st.markdown(f"""
             <div class='activity-row'>
@@ -343,7 +337,7 @@ if st.session_state.role == 'admin':
             
             with col2:
                 st.write(f"**Input:** `{log['input_dataset']}`")
-                # Download input dataset
+# Download input dataset
                 input_path = log.get('input_path', '')
                 if input_path and os.path.exists(input_path):
                     with open(input_path, 'rb') as f:
@@ -360,7 +354,7 @@ if st.session_state.role == 'admin':
             
             with col3:
                 st.write(f"**Output:** `{log['output_dataset']}`")
-                # Download output dataset
+# Download output dataset
                 output_path = log.get('output_path', '')
                 if output_path and os.path.exists(output_path):
                     with open(output_path, 'rb') as f:
@@ -417,9 +411,7 @@ if st.session_state.role == 'admin':
     
     st.stop()
 
-# =============================================================================
 # MAIN APPLICATION (After Login - For Users Only)
-# =============================================================================
 
 # Welcome header and Logout button on same line
 col1, col2, col3 = st.columns([4, 1, 1])
@@ -443,9 +435,7 @@ st.markdown("---")
 # Main heading
 st.markdown("## Upload Sensor Dataset")
 
-# --------------------------------------------------------------
 # DROPDOWN: Select mode
-# --------------------------------------------------------------
 mode = st.selectbox(
     "Select Sensor Type",
     [
@@ -459,9 +449,7 @@ mode = st.selectbox(
     ]
 )
 
-# --------------------------------------------------------------
 # File uploader
-# --------------------------------------------------------------
 st.markdown("#### Upload CSV File")
 
 uploaded_file = st.file_uploader(
@@ -481,9 +469,7 @@ if not uploaded_file:
 
 df = pd.read_csv(uploaded_file)
 
-# --------------------------------------------------------------
 # Helper to validate dataset matches selected sensor type
-# --------------------------------------------------------------
 def validate_dataset(df_cols, sensor_mode):
     """Check if uploaded dataset columns match the selected sensor type"""
     from alias_utils import normalize_col
@@ -524,9 +510,7 @@ def validate_dataset(df_cols, sensor_mode):
     
     return True  # Unknown mode, allow
 
-# --------------------------------------------------------------
 # Helper to load specific sensor model exactly like router
-# --------------------------------------------------------------
 def load_single_model(sensor_name):
     file_map = {
         "Wafer Sensor": "wafer_pipeline.joblib",
@@ -546,22 +530,16 @@ def load_single_model(sensor_name):
     return joblib.load(model_path)
 
 
-# --------------------------------------------------------------
 # Prediction button
-# --------------------------------------------------------------
 if st.button("Run Fault Detection"):
     with st.spinner("Predicting..."):
 
-        # ------------------------------------------------------
         # 1️⃣ ALL-IN-ONE MODE → use your working router
-        # ------------------------------------------------------
         if mode == "All-in-One Sensor":
             router = AllInOneRouter(model_dir="models")
             pred_df = router.route_and_predict(df)
 
-        # ------------------------------------------------------
         # 2️⃣ SINGLE SENSOR MODE → load specific model
-        # ------------------------------------------------------
         else:
             # Validate dataset matches selected sensor type
             if not validate_dataset(df.columns, mode):
@@ -623,15 +601,11 @@ if st.button("Run Fault Detection"):
 
             pred_df = pd.DataFrame(results)
 
-    # ------------------------------------------------------
     # Reorder columns to show sensor_type and prediction first
-    # ------------------------------------------------------
     cols = ['sensor_type', 'prediction'] + [col for col in pred_df.columns if col not in ['sensor_type', 'prediction']]
     pred_df = pred_df[cols]
 
-    # ------------------------------------------------------
     # Log user activity immediately after prediction
-    # ------------------------------------------------------
     try:
         log_user_activity(
             username=st.session_state.username,
@@ -644,9 +618,7 @@ if st.button("Run Fault Detection"):
     except Exception as e:
         st.warning(f"Activity logging failed: {str(e)}")
 
-    # ------------------------------------------------------
     # Show results
-    # ------------------------------------------------------
     st.subheader("Predictions Preview")
     st.dataframe(pred_df.head())
 

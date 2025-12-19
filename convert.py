@@ -3,9 +3,7 @@
 # because your pickle files expect: __main__.WaferAggregator & __main__.FeatureEngineer
 
 
-# ---------------------------
 # 1. Import required packages
-# ---------------------------
 import pandas as pd
 import numpy as np
 from sklearn.base import BaseEstimator, TransformerMixin
@@ -13,10 +11,8 @@ from sklearn.preprocessing import StandardScaler, LabelEncoder
 from xgboost import XGBClassifier
 
 
-# ---------------------------
 # 2. DEFINE REQUIRED CLASSES HERE
 # EXACT MATCH required for pickle to load
-# ---------------------------
 
 class WaferAggregator(BaseEstimator, TransformerMixin):
     def __init__(self, target="faulty"):
@@ -126,9 +122,7 @@ class SoilSensorPipeline:
         return self.encoder.inverse_transform(preds)
 
 
-# ---------------------------
 # 3. Run conversion
-# ---------------------------
 from scripts.convert_pkls_to_joblib import convert_all
 
 if __name__ == "__main__":

@@ -34,9 +34,8 @@ class AllInOneRouter:
                 except Exception as e:
                     print(f"[ERROR] loading {path}: {e}")
 
-    # ==========================================================
     # SENSOR DETECTION (FINAL FIXED VERSION)
-    # ==========================================================
+
     def _detect_sensor(self, row_df):
         raw_cols = [str(c).strip().lower() for c in row_df.columns]
         norm_cols = [normalize_col(c) for c in row_df.columns]
@@ -72,9 +71,8 @@ class AllInOneRouter:
 
         return "unknown"
 
-    # ==========================================================
     # PREPARE FEATURES
-    # ==========================================================
+
     def _apply_aliases(self, row_df, sensor):
         expected = EXPECTED_FEATURES.get(sensor, [])
         rename_map, notes = map_columns_with_aliases(
@@ -95,9 +93,8 @@ class AllInOneRouter:
 
         return prepared, notes
 
-    # ==========================================================
     # PREDICTOR
-    # ==========================================================
+
     def route_and_predict(self, df):
         rows = []
 
