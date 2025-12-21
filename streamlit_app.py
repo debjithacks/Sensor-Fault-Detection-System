@@ -479,7 +479,7 @@ def validate_dataset(df_cols, sensor_mode):
     
     has_sensor_value = ("sensorvalue" in norm_cols)
     
-    # Wafer: Must have wafer_id OR multiple sensor_N columns (but not just sensor_value)
+    # Wafer: Must have wafer_id OR multiple sensor_N columns 
     if sensor_mode == "Wafer Sensor":
         has_wafer_id = any("wafer" in col for col in norm_cols)
         sensor_cols = [col for col in norm_cols if col.startswith("sensor") and col != "sensorvalue"]
@@ -534,12 +534,12 @@ def load_single_model(sensor_name):
 if st.button("Run Fault Detection"):
     with st.spinner("Predicting..."):
 
-        # 1️⃣ ALL-IN-ONE MODE → use your working router
+        # ALL-IN-ONE MODE - use working router
         if mode == "All-in-One Sensor":
             router = AllInOneRouter(model_dir="models")
             pred_df = router.route_and_predict(df)
 
-        # 2️⃣ SINGLE SENSOR MODE → load specific model
+        # SINGLE SENSOR MODE - load specific model
         else:
             # Validate dataset matches selected sensor type
             if not validate_dataset(df.columns, mode):
@@ -573,7 +573,7 @@ if st.button("Run Fault Detection"):
             for _, row in df.iterrows():
                 row_df = row.to_frame().T
 
-                # Alias mapping (same code as router)
+                # Alias mapping 
                 rename_map, notes = map_columns_with_aliases(
                     row_df.columns, expected_cols
                 )

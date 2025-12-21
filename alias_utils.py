@@ -1,4 +1,3 @@
-# alias_utils.py
 import re
 from difflib import get_close_matches
 
@@ -8,11 +7,6 @@ def normalize_col(col):
     s = str(col).lower().strip()
     s = re.sub(r'[^0-9a-z]', '', s)  # remove punctuation
     return s
-
-# IMPORTANT FIX:
-# ❌ We remove "timestampms": "timestamp_ms"
-# because it incorrectly maps timestamp(ms) → soil timestamp_ms
-# and breaks temperature detection.
 
 SYNONYMS = {
     "mq2": "mq2_value",

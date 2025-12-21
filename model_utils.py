@@ -1,4 +1,3 @@
-# model_utils.py
 import joblib
 import cloudpickle
 

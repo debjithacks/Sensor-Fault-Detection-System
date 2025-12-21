@@ -1,8 +1,3 @@
-# convert.py
-# THIS FILE BECOMES __main__, so we must define the classes here
-# because your pickle files expect: __main__.WaferAggregator & __main__.FeatureEngineer
-
-
 # 1. Import required packages
 import pandas as pd
 import numpy as np
